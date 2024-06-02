@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const { v4: uuidv4 } = require('uuid');
-const path = require('path'); // เพิ่มเส้นทาง
+const path = require('path'); // เพิ่ม path module เข้ามา
 
 const app = express();
 const server = http.createServer(app);
@@ -11,8 +11,18 @@ const io = socketIo(server);
 const port = process.env.PORT || 3000;
 
 let games = [];
+// ใช้ express.static เพื่อให้ Express เสิร์ฟไฟล์แบบสแตติก
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(express.static(path.join(__dirname, 'public'))); // เปลี่ยนเส้นทาง
+// เส้นทางไปยัง game.html
+app.get('/game.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'game.html'));
+});
+
+// เส้นทางไปยัง game.html
+app.get('/game.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'game.html'));
+});
 
 io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id}`);
